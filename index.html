@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReviewSphere - Universal Community Reviews</title>
+  <meta name="description" content="Discover, search by name, and share honest reviews for Movies, Games, Tech, Books, Food, and more. World-class community review platform!">
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-logo" id="logo-btn">
+        <div class="logo-icon">
+          <i class="fa-solid fa-star-half-stroke">★</i>
+        </div>
+        <span class="logo-text">Review<span class="highlight">Sphere</span></span>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav class="nav-menu">
+        <button class="nav-link active" data-category="all">
+          <i class="fa-solid fa-globe">🌐</i> All Reviews
+        </button>
+        <button class="nav-link" data-category="movies">
+          <i class="fa-solid fa-film">🎬</i> Movies
+        </button>
+        <button class="nav-link" data-category="games">
+          <i class="fa-solid fa-gamepad">🎮</i> Gaming
+        </button>
+        <button class="nav-link" data-category="tech">
+          <i class="fa-solid fa-mobile-screen">📱</i> Tech
+        </button>
+        <button class="nav-link" data-category="food">
+          <i class="fa-solid fa-utensils">🍕</i> Food
+        </button>
+        <button class="nav-link" data-category="books">
+          <i class="fa-solid fa-book">📚</i> Books
+        </button>
+      </nav>
+
+      <!-- Action CTAs -->
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Light / Dark Mode">
+          <span class="theme-icon">🌙</span>
+        </button>
+
+        <!-- Saved Bookmarks -->
+        <button class="btn btn-secondary" id="open-bookmarks-btn">
+          <i class="fa-solid fa-bookmark">🔖</i> Saved (<span id="bookmark-count">0</span>)
+        </button>
+
+        <!-- My Profile -->
+        <button class="btn btn-secondary" id="open-my-profile-btn">
+          <i class="fa-solid fa-user-gear">👤</i> Profile
+        </button>
+
+        <!-- Write Review -->
+        <button class="btn btn-primary" id="open-write-modal">
+          <i class="fa-solid fa-pen-to-square">✍️</i> Write Review
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        <span>World-Class Community Platform</span>
+      </div>
+      
+      <h1 class="hero-title">
+        Search & Discover Reviews for <span class="gradient-text">Any Item</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Kisi bhi movie, game, tech gadget, restaurant ya book ka naam search karein aur real audience rating & reviews dekhein!
+      </p>
+
+      <!-- Advanced Autocomplete Search Box -->
+      <div class="search-box-container">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon">🔍</i>
+          <input type="text" id="search-input" placeholder="Type item name... (e.g. Inception, Cyberpunk, iPhone, Pizza...)" autocomplete="off">
+          <button class="search-clear-btn" id="search-clear" style="display:none;">
+            <i class="fa-solid fa-xmark">✖</i>
+          </button>
+        </div>
+        <!-- Search Autocomplete Dropdown -->
+        <div class="search-autocomplete-dropdown" id="search-dropdown" style="display: none;"></div>
+      </div>
+
+      <!-- Quick Platform Stats -->
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-number" id="stat-total-reviews">128+</span>
+          <span class="stat-label">Community Reviews</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-number">96% <i class="fa-solid fa-fire gold">🔥</i></span>
+          <span class="stat-label">Positive Sentiment</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-number">4.8 <i class="fa-solid fa-star gold">★</i></span>
+          <span class="stat-label">Community Rating</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dynamic Item Aggregated Scorecard Banner (Shown when searching an item) -->
+  <div class="item-scorecard-banner" id="item-scorecard" style="display: none;">
+    <div class="item-scorecard-content">
+      <div class="item-score-main">
+        <div class="item-sentiment-badge" id="scorecard-badge">95% Verified Positive</div>
+        <h2 id="scorecard-item-title">Item Name</h2>
+        <div class="scorecard-meta">
+          <span id="scorecard-category">Category</span> &bull; 
+          <span id="scorecard-rating">4.8 ★</span> &bull; 
+          <span id="scorecard-count">0 Reviews</span>
+        </div>
+      </div>
+      <div class="item-scorecard-action">
+        <button class="btn btn-primary" id="scorecard-review-btn">
+          <i class="fa-solid fa-plus">➕</i> Add Your Review for <span id="scorecard-btn-item">this item</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+
+    <!-- Categories Banner Grid -->
+    <section class="category-banner-section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fa-solid fa-layer-group">📂</i> Popular Categories</h2>
+        <p class="section-sub">Aap kis field ka review dekhna ya likhna chahte hain?</p>
+      </div>
+
+      <div class="category-cards-grid">
+        <div class="cat-card" data-cat="movies">
+          <div class="cat-icon cat-movies"><i class="fa-solid fa-film">🎬</i></div>
+          <div class="cat-info">
+            <h3>Movies & Shows</h3>
+            <span class="cat-count" id="count-movies">0 reviews</span>
+          </div>
+        </div>
+
+        <div class="cat-card" data-cat="games">
+          <div class="cat-icon cat-games"><i class="fa-solid fa-gamepad">🎮</i></div>
+          <div class="cat-info">
+            <h3>Gaming & Esports</h3>
+            <span class="cat-count" id="count-games">0 reviews</span>
+          </div>
+        </div>
+
+        <div class="cat-card" data-cat="tech">
+          <div class="cat-icon cat-tech"><i class="fa-solid fa-laptop">📱</i></div>
+          <div class="cat-info">
+            <h3>Tech & Gadgets</h3>
+            <span class="cat-count" id="count-tech">0 reviews</span>
+          </div>
+        </div>
+
+        <div class="cat-card" data-cat="food">
+          <div class="cat-icon cat-food"><i class="fa-solid fa-burger">🍕</i></div>
+          <div class="cat-info">
+            <h3>Food & Dining</h3>
+            <span class="cat-count" id="count-food">0 reviews</span>
+          </div>
+        </div>
+
+        <div class="cat-card" data-cat="books">
+          <div class="cat-icon cat-books"><i class="fa-solid fa-book-open">📚</i></div>
+          <div class="cat-info">
+            <h3>Books & Literature</h3>
+            <span class="cat-count" id="count-books">0 reviews</span>
+          </div>
+        </div>
+
+        <div class="cat-card" data-cat="anime">
+          <div class="cat-icon cat-anime"><i class="fa-solid fa-tv">⛩️</i></div>
+          <div class="cat-info">
+            <h3>Anime & Pop Culture</h3>
+            <span class="cat-count" id="count-anime">0 reviews</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Filter Toolbar -->
+    <section class="reviews-section">
+      <div class="toolbar-container">
+        <div class="toolbar-title-wrap">
+          <h2 id="active-category-title"><i class="fa-solid fa-fire text-accent">🔥</i> All Reviews</h2>
+          <span class="results-badge" id="results-count">0 Reviews found</span>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+          <!-- Rating Filter -->
+          <div class="select-wrapper">
+            <i class="fa-solid fa-filter select-icon">🔍</i>
+            <select id="filter-rating">
+              <option value="all">All Ratings</option>
+              <option value="5">5 Stars Only</option>
+              <option value="4">4+ Stars</option>
+              <option value="3">3+ Stars</option>
+            </select>
+          </div>
+
+          <!-- Sort Filter -->
+          <div class="select-wrapper">
+            <i class="fa-solid fa-arrow-down-short-wide select-icon">↕</i>
+            <select id="filter-sort">
+              <option value="newest">Newest First</option>
+              <option value="highest">Highest Rated</option>
+              <option value="popular">Most Helpful 👍</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Feed Grid -->
+      <div class="reviews-grid" id="reviews-container">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+
+      <!-- Empty State Container -->
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <div class="empty-icon"><i class="fa-solid fa-folder-open">📂</i></div>
+        <h3 id="empty-title">Is query ke liye koi review nahi mila!</h3>
+        <p id="empty-desc">Aap pehle audience hain jo is item par sabse pehla review likh sakte hain!</p>
+        <button class="btn btn-primary" id="empty-write-btn">
+          <i class="fa-solid fa-plus">➕</i> Write First Review
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Write Review Modal -->
+  <div class="modal-overlay" id="write-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title"><i class="fa-solid fa-pen-nib text-accent">✍️</i> Submit Your Review</h2>
+          <p class="modal-sub">Apna honest review share karein aur dusro ki help karein</p>
+        </div>
+        <button class="modal-close" id="close-write-modal"><i class="fa-solid fa-xmark">✖</i></button>
+      </div>
+
+      <form id="review-form" class="modal-body">
+        
+        <!-- Category & Item Name -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-category">Category Select Karein <span class="req">*</span></label>
+            <select id="form-category" required>
+              <option value="" disabled selected>Category chunnein...</option>
+              <option value="movies">🎬 Movies & Shows</option>
+              <option value="games">🎮 Gaming & Esports</option>
+              <option value="tech">📱 Tech & Gadgets</option>
+              <option value="food">🍕 Food & Restaurants</option>
+              <option value="books">📚 Books & Literature</option>
+              <option value="anime">⛩️ Anime & Pop Culture</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="form-item-name">Item / Topic Title (Naam) <span class="req">*</span></label>
+            <input type="text" id="form-item-name" placeholder="e.g. Inception, GTA VI, PS5 Pro, Cyberpunk..." required>
+          </div>
+        </div>
+
+        <!-- Star Rating Input -->
+        <div class="form-group">
+          <label>Aapki Star Rating <span class="req">*</span></label>
+          <div class="star-rating-input" id="star-input-group">
+            <span class="star-btn" data-value="1">★</span>
+            <span class="star-btn" data-value="2">★</span>
+            <span class="star-btn" data-value="3">★</span>
+            <span class="star-btn" data-value="4">★</span>
+            <span class="star-btn" data-value="5">★</span>
+            <span class="rating-label-text" id="rating-text-hint">Rating chunnein</span>
+          </div>
+          <input type="hidden" id="form-rating-val" required value="0">
+        </div>
+
+        <!-- Review Headline -->
+        <div class="form-group">
+          <label for="form-headline">Review Headline <span class="req">*</span></label>
+          <input type="text" id="form-headline" placeholder="e.g. Masterpiece storyline! or Value for money gadget!" required>
+        </div>
+
+        <!-- Pros & Cons -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-pros"><i class="fa-solid fa-circle-check text-green">✅</i> Pros (Acchi Baatein)</label>
+            <input type="text" id="form-pros" placeholder="e.g. Great graphics, Smooth performance (comma separated)">
+          </div>
+
+          <div class="form-group">
+            <label for="form-cons"><i class="fa-solid fa-circle-xmark text-red">❌</i> Cons (Kamiya)</label>
+            <input type="text" id="form-cons" placeholder="e.g. Battery life average, Price high">
+          </div>
+        </div>
+
+        <!-- Full Review Text -->
+        <div class="form-group">
+          <label for="form-text">Detailed Review <span class="req">*</span></label>
+          <textarea id="form-text" rows="4" placeholder="Apna pura experience likhein... kyu achha laga ya kya kami lagi?" required></textarea>
+        </div>
+
+        <!-- Author Name & Avatar selection -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-author-name">Aapka Naam / Username <span class="req">*</span></label>
+            <input type="text" id="form-author-name" placeholder="e.g. Rohit Kumar, TechGeek99..." required>
+          </div>
+
+          <div class="form-group">
+            <label for="form-author-avatar">Avatar Color Theme</label>
+            <select id="form-author-avatar">
+              <option value="violet">💜 Electric Violet</option>
+              <option value="cyan">🩵 Cyber Cyan</option>
+              <option value="emerald">💚 Emerald Green</option>
+              <option value="amber">💛 Warm Gold</option>
+              <option value="rose">🩷 Rose Pink</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-write-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-paper-plane">🚀</i> Publish Review
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Detailed Review View Modal (With Comments) -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-card modal-card-lg">
+      <button class="modal-close" id="close-detail-modal"><i class="fa-solid fa-xmark">✖</i></button>
+      
+      <div class="detail-content" id="detail-modal-body">
+        <!-- Injected dynamically via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile Modal -->
+  <div class="modal-overlay" id="profile-modal">
+    <div class="modal-card modal-card-lg">
+      <button class="modal-close" id="close-profile-modal"><i class="fa-solid fa-xmark">✖</i></button>
+      
+      <div class="detail-content" id="profile-modal-body">
+        <!-- Injected dynamically via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookmarks Drawer Modal -->
+  <div class="modal-overlay" id="bookmarks-modal">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title"><i class="fa-solid fa-bookmark text-accent">🔖</i> Saved Reviews (<span id="bm-modal-count">0</span>)</h2>
+          <p class="modal-sub">Aapke save kiye hue favorite reviews</p>
+        </div>
+        <button class="modal-close" id="close-bookmarks-modal"><i class="fa-solid fa-xmark">✖</i></button>
+      </div>
+      <div class="modal-body" id="bookmarks-modal-body">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="#" class="brand-logo">
+          <div class="logo-icon"><i class="fa-solid fa-star-half-stroke">★</i></div>
+          <span class="logo-text">Review<span class="highlight">Sphere</span></span>
+        </a>
+        <p>India's Universal Audience Review Platform. Search any item by name and discover real reviews!</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Quick Categories</h4>
+        <a href="#" class="cat-footer-link" data-category="movies">Movies & Shows</a>
+        <a href="#" class="cat-footer-link" data-category="games">Gaming</a>
+        <a href="#" class="cat-footer-link" data-category="tech">Tech & Gadgets</a>
+        <a href="#" class="cat-footer-link" data-category="food">Food & Dining</a>
+      </div>
+
+      <div class="footer-community">
+        <h4>Community & Features</h4>
+        <p><i class="fa-solid fa-shield-halved text-accent">🛡️</i> Verified Purchase Badges</p>
+        <p><i class="fa-solid fa-comments text-accent">💬</i> Nested Comment Discussions</p>
+        <p><i class="fa-solid fa-bookmark text-accent">🔖</i> Bookmark & Save Reviews</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ReviewSphere. Inspired by IMDb, Rotten Tomatoes & Metacritic.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
