@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ReviewSphere - Universal Community Reviews</title>
-  <meta name="description" content="Discover, search by name, and share honest reviews for Movies, Games, Tech, Books, Food, and more. World-class community review platform!">
+  <meta name="description" content="Search by name and share honest reviews for Movies, Games, Tech, Books, Food, and more.">
   
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
+  <!-- FontAwesome 6.4.0 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
   
   <!-- Custom Styles -->
@@ -24,7 +24,7 @@
     <div class="nav-container">
       <a href="#" class="brand-logo" id="logo-btn">
         <div class="logo-icon">
-          <i class="fa-solid fa-star-half-stroke">★</i>
+          <i class="fa-solid fa-star-half-stroke"></i>
         </div>
         <span class="logo-text">Review<span class="highlight">Sphere</span></span>
       </a>
@@ -32,22 +32,22 @@
       <!-- Quick Nav Links -->
       <nav class="nav-menu">
         <button class="nav-link active" data-category="all">
-          <i class="fa-solid fa-globe">🌐</i> All Reviews
+          <i class="fa-solid fa-globe"></i> All Reviews
         </button>
         <button class="nav-link" data-category="movies">
-          <i class="fa-solid fa-film">🎬</i> Movies
+          <i class="fa-solid fa-film"></i> Movies
         </button>
         <button class="nav-link" data-category="games">
-          <i class="fa-solid fa-gamepad">🎮</i> Gaming
+          <i class="fa-solid fa-gamepad"></i> Gaming
         </button>
         <button class="nav-link" data-category="tech">
-          <i class="fa-solid fa-mobile-screen">📱</i> Tech
+          <i class="fa-solid fa-mobile-screen"></i> Tech
         </button>
         <button class="nav-link" data-category="food">
-          <i class="fa-solid fa-utensils">🍕</i> Food
+          <i class="fa-solid fa-utensils"></i> Food
         </button>
         <button class="nav-link" data-category="books">
-          <i class="fa-solid fa-book">📚</i> Books
+          <i class="fa-solid fa-book"></i> Books
         </button>
       </nav>
 
@@ -55,22 +55,22 @@
       <div class="nav-actions">
         <!-- Theme Toggle -->
         <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Light / Dark Mode">
-          <span class="theme-icon">🌙</span>
+          <i class="fa-solid fa-moon theme-icon"></i>
         </button>
 
         <!-- Saved Bookmarks -->
         <button class="btn btn-secondary" id="open-bookmarks-btn">
-          <i class="fa-solid fa-bookmark">🔖</i> Saved (<span id="bookmark-count">0</span>)
+          <i class="fa-solid fa-bookmark"></i> Saved (<span id="bookmark-count">0</span>)
         </button>
 
         <!-- My Profile -->
         <button class="btn btn-secondary" id="open-my-profile-btn">
-          <i class="fa-solid fa-user-gear">👤</i> Profile
+          <i class="fa-solid fa-user-gear"></i> Profile
         </button>
 
         <!-- Write Review -->
         <button class="btn btn-primary" id="open-write-modal">
-          <i class="fa-solid fa-pen-to-square">✍️</i> Write Review
+          <i class="fa-solid fa-pen-to-square"></i> Write Review
         </button>
       </div>
     </div>
@@ -80,7 +80,7 @@
   <section class="hero-section">
     <div class="hero-bg-glow"></div>
     <div class="hero-container">
-      <div class="hero-badge">
+      <div class="hero-badge animate-float">
         <span class="pulse-dot"></span>
         <span>World-Class Community Platform</span>
       </div>
@@ -90,23 +90,23 @@
       </h1>
       
       <p class="hero-subtitle">
-        Kisi bhi movie, game, tech gadget, restaurant ya book ka naam search karein aur real audience rating & reviews dekhein!
+        Har category ki real audience se verified reviews padhein. Movies, Games, Tech, Food, aur Books ka naam search karke score breakdown dekhein!
       </p>
 
-      <!-- Advanced Autocomplete Search Box -->
+      <!-- Advanced Search Box -->
       <div class="search-box-container">
         <div class="search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon">🔍</i>
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
           <input type="text" id="search-input" placeholder="Type item name... (e.g. Inception, Cyberpunk, iPhone, Pizza...)" autocomplete="off">
           <button class="search-clear-btn" id="search-clear" style="display:none;">
-            <i class="fa-solid fa-xmark">✖</i>
+            <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
         <!-- Search Autocomplete Dropdown -->
         <div class="search-autocomplete-dropdown" id="search-dropdown" style="display: none;"></div>
       </div>
 
-      <!-- Quick Platform Stats -->
+      <!-- Platform Stats -->
       <div class="hero-stats">
         <div class="stat-card">
           <span class="stat-number" id="stat-total-reviews">128+</span>
@@ -114,33 +114,33 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-card">
-          <span class="stat-number">96% <i class="fa-solid fa-fire gold">🔥</i></span>
+          <span class="stat-number">96% <i class="fa-solid fa-fire gold"></i></span>
           <span class="stat-label">Positive Sentiment</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-card">
-          <span class="stat-number">4.8 <i class="fa-solid fa-star gold">★</i></span>
+          <span class="stat-number">4.8 <i class="fa-solid fa-star gold"></i></span>
           <span class="stat-label">Community Rating</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Dynamic Item Aggregated Scorecard Banner (Shown when searching an item) -->
+  <!-- Item Aggregated Scorecard Banner (Shown when searching an item) -->
   <div class="item-scorecard-banner" id="item-scorecard" style="display: none;">
-    <div class="item-scorecard-content">
+    <div class="item-scorecard-content animate-fade-in">
       <div class="item-score-main">
         <div class="item-sentiment-badge" id="scorecard-badge">95% Verified Positive</div>
         <h2 id="scorecard-item-title">Item Name</h2>
         <div class="scorecard-meta">
           <span id="scorecard-category">Category</span> &bull; 
-          <span id="scorecard-rating">4.8 ★</span> &bull; 
+          <span id="scorecard-rating">4.8 <i class="fa-solid fa-star gold"></i></span> &bull; 
           <span id="scorecard-count">0 Reviews</span>
         </div>
       </div>
       <div class="item-scorecard-action">
         <button class="btn btn-primary" id="scorecard-review-btn">
-          <i class="fa-solid fa-plus">➕</i> Add Your Review for <span id="scorecard-btn-item">this item</span>
+          <i class="fa-solid fa-plus"></i> Add Your Review for <span id="scorecard-btn-item">this item</span>
         </button>
       </div>
     </div>
@@ -152,13 +152,13 @@
     <!-- Categories Banner Grid -->
     <section class="category-banner-section">
       <div class="section-header">
-        <h2 class="section-title"><i class="fa-solid fa-layer-group">📂</i> Popular Categories</h2>
+        <h2 class="section-title"><i class="fa-solid fa-layer-group text-accent"></i> Popular Categories</h2>
         <p class="section-sub">Aap kis field ka review dekhna ya likhna chahte hain?</p>
       </div>
 
       <div class="category-cards-grid">
         <div class="cat-card" data-cat="movies">
-          <div class="cat-icon cat-movies"><i class="fa-solid fa-film">🎬</i></div>
+          <div class="cat-icon cat-movies"><i class="fa-solid fa-film"></i></div>
           <div class="cat-info">
             <h3>Movies & Shows</h3>
             <span class="cat-count" id="count-movies">0 reviews</span>
@@ -166,7 +166,7 @@
         </div>
 
         <div class="cat-card" data-cat="games">
-          <div class="cat-icon cat-games"><i class="fa-solid fa-gamepad">🎮</i></div>
+          <div class="cat-icon cat-games"><i class="fa-solid fa-gamepad"></i></div>
           <div class="cat-info">
             <h3>Gaming & Esports</h3>
             <span class="cat-count" id="count-games">0 reviews</span>
@@ -174,7 +174,7 @@
         </div>
 
         <div class="cat-card" data-cat="tech">
-          <div class="cat-icon cat-tech"><i class="fa-solid fa-laptop">📱</i></div>
+          <div class="cat-icon cat-tech"><i class="fa-solid fa-laptop"></i></div>
           <div class="cat-info">
             <h3>Tech & Gadgets</h3>
             <span class="cat-count" id="count-tech">0 reviews</span>
@@ -182,7 +182,7 @@
         </div>
 
         <div class="cat-card" data-cat="food">
-          <div class="cat-icon cat-food"><i class="fa-solid fa-burger">🍕</i></div>
+          <div class="cat-icon cat-food"><i class="fa-solid fa-utensils"></i></div>
           <div class="cat-info">
             <h3>Food & Dining</h3>
             <span class="cat-count" id="count-food">0 reviews</span>
@@ -190,7 +190,7 @@
         </div>
 
         <div class="cat-card" data-cat="books">
-          <div class="cat-icon cat-books"><i class="fa-solid fa-book-open">📚</i></div>
+          <div class="cat-icon cat-books"><i class="fa-solid fa-book-open"></i></div>
           <div class="cat-info">
             <h3>Books & Literature</h3>
             <span class="cat-count" id="count-books">0 reviews</span>
@@ -198,7 +198,7 @@
         </div>
 
         <div class="cat-card" data-cat="anime">
-          <div class="cat-icon cat-anime"><i class="fa-solid fa-tv">⛩️</i></div>
+          <div class="cat-icon cat-anime"><i class="fa-solid fa-tv"></i></div>
           <div class="cat-info">
             <h3>Anime & Pop Culture</h3>
             <span class="cat-count" id="count-anime">0 reviews</span>
@@ -211,7 +211,7 @@
     <section class="reviews-section">
       <div class="toolbar-container">
         <div class="toolbar-title-wrap">
-          <h2 id="active-category-title"><i class="fa-solid fa-fire text-accent">🔥</i> All Reviews</h2>
+          <h2 id="active-category-title"><i class="fa-solid fa-fire text-accent"></i> All Reviews</h2>
           <span class="results-badge" id="results-count">0 Reviews found</span>
         </div>
 
@@ -219,7 +219,7 @@
         <div class="filter-controls">
           <!-- Rating Filter -->
           <div class="select-wrapper">
-            <i class="fa-solid fa-filter select-icon">🔍</i>
+            <i class="fa-solid fa-filter select-icon"></i>
             <select id="filter-rating">
               <option value="all">All Ratings</option>
               <option value="5">5 Stars Only</option>
@@ -230,7 +230,7 @@
 
           <!-- Sort Filter -->
           <div class="select-wrapper">
-            <i class="fa-solid fa-arrow-down-short-wide select-icon">↕</i>
+            <i class="fa-solid fa-arrow-down-short-wide select-icon"></i>
             <select id="filter-sort">
               <option value="newest">Newest First</option>
               <option value="highest">Highest Rated</option>
@@ -247,11 +247,11 @@
 
       <!-- Empty State Container -->
       <div class="empty-state" id="empty-state" style="display: none;">
-        <div class="empty-icon"><i class="fa-solid fa-folder-open">📂</i></div>
+        <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
         <h3 id="empty-title">Is query ke liye koi review nahi mila!</h3>
         <p id="empty-desc">Aap pehle audience hain jo is item par sabse pehla review likh sakte hain!</p>
         <button class="btn btn-primary" id="empty-write-btn">
-          <i class="fa-solid fa-plus">➕</i> Write First Review
+          <i class="fa-solid fa-plus"></i> Write First Review
         </button>
       </div>
     </section>
@@ -263,10 +263,10 @@
     <div class="modal-card">
       <div class="modal-header">
         <div>
-          <h2 class="modal-title"><i class="fa-solid fa-pen-nib text-accent">✍️</i> Submit Your Review</h2>
+          <h2 class="modal-title"><i class="fa-solid fa-pen-nib text-accent"></i> Submit Your Review</h2>
           <p class="modal-sub">Apna honest review share karein aur dusro ki help karein</p>
         </div>
-        <button class="modal-close" id="close-write-modal"><i class="fa-solid fa-xmark">✖</i></button>
+        <button class="modal-close" id="close-write-modal"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <form id="review-form" class="modal-body">
@@ -296,11 +296,11 @@
         <div class="form-group">
           <label>Aapki Star Rating <span class="req">*</span></label>
           <div class="star-rating-input" id="star-input-group">
-            <span class="star-btn" data-value="1">★</span>
-            <span class="star-btn" data-value="2">★</span>
-            <span class="star-btn" data-value="3">★</span>
-            <span class="star-btn" data-value="4">★</span>
-            <span class="star-btn" data-value="5">★</span>
+            <i class="fa-solid fa-star star-btn" data-value="1"></i>
+            <i class="fa-solid fa-star star-btn" data-value="2"></i>
+            <i class="fa-solid fa-star star-btn" data-value="3"></i>
+            <i class="fa-solid fa-star star-btn" data-value="4"></i>
+            <i class="fa-solid fa-star star-btn" data-value="5"></i>
             <span class="rating-label-text" id="rating-text-hint">Rating chunnein</span>
           </div>
           <input type="hidden" id="form-rating-val" required value="0">
@@ -315,12 +315,12 @@
         <!-- Pros & Cons -->
         <div class="form-row">
           <div class="form-group">
-            <label for="form-pros"><i class="fa-solid fa-circle-check text-green">✅</i> Pros (Acchi Baatein)</label>
+            <label for="form-pros"><i class="fa-solid fa-circle-check text-green"></i> Pros (Acchi Baatein)</label>
             <input type="text" id="form-pros" placeholder="e.g. Great graphics, Smooth performance (comma separated)">
           </div>
 
           <div class="form-group">
-            <label for="form-cons"><i class="fa-solid fa-circle-xmark text-red">❌</i> Cons (Kamiya)</label>
+            <label for="form-cons"><i class="fa-solid fa-circle-xmark text-red"></i> Cons (Kamiya)</label>
             <input type="text" id="form-cons" placeholder="e.g. Battery life average, Price high">
           </div>
         </div>
@@ -354,7 +354,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" id="cancel-write-modal">Cancel</button>
           <button type="submit" class="btn btn-primary">
-            <i class="fa-solid fa-paper-plane">🚀</i> Publish Review
+            <i class="fa-solid fa-paper-plane"></i> Publish Review
           </button>
         </div>
 
@@ -365,7 +365,7 @@
   <!-- Detailed Review View Modal (With Comments) -->
   <div class="modal-overlay" id="detail-modal">
     <div class="modal-card modal-card-lg">
-      <button class="modal-close" id="close-detail-modal"><i class="fa-solid fa-xmark">✖</i></button>
+      <button class="modal-close" id="close-detail-modal"><i class="fa-solid fa-xmark"></i></button>
       
       <div class="detail-content" id="detail-modal-body">
         <!-- Injected dynamically via script.js -->
@@ -376,7 +376,7 @@
   <!-- User Profile Modal -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-card modal-card-lg">
-      <button class="modal-close" id="close-profile-modal"><i class="fa-solid fa-xmark">✖</i></button>
+      <button class="modal-close" id="close-profile-modal"><i class="fa-solid fa-xmark"></i></button>
       
       <div class="detail-content" id="profile-modal-body">
         <!-- Injected dynamically via script.js -->
@@ -389,10 +389,10 @@
     <div class="modal-card modal-card-lg">
       <div class="modal-header">
         <div>
-          <h2 class="modal-title"><i class="fa-solid fa-bookmark text-accent">🔖</i> Saved Reviews (<span id="bm-modal-count">0</span>)</h2>
+          <h2 class="modal-title"><i class="fa-solid fa-bookmark text-accent"></i> Saved Reviews (<span id="bm-modal-count">0</span>)</h2>
           <p class="modal-sub">Aapke save kiye hue favorite reviews</p>
         </div>
-        <button class="modal-close" id="close-bookmarks-modal"><i class="fa-solid fa-xmark">✖</i></button>
+        <button class="modal-close" id="close-bookmarks-modal"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body" id="bookmarks-modal-body">
         <!-- Injected dynamically -->
@@ -408,7 +408,7 @@
     <div class="footer-container">
       <div class="footer-brand">
         <a href="#" class="brand-logo">
-          <div class="logo-icon"><i class="fa-solid fa-star-half-stroke">★</i></div>
+          <div class="logo-icon"><i class="fa-solid fa-star-half-stroke"></i></div>
           <span class="logo-text">Review<span class="highlight">Sphere</span></span>
         </a>
         <p>India's Universal Audience Review Platform. Search any item by name and discover real reviews!</p>
@@ -424,9 +424,9 @@
 
       <div class="footer-community">
         <h4>Community & Features</h4>
-        <p><i class="fa-solid fa-shield-halved text-accent">🛡️</i> Verified Purchase Badges</p>
-        <p><i class="fa-solid fa-comments text-accent">💬</i> Nested Comment Discussions</p>
-        <p><i class="fa-solid fa-bookmark text-accent">🔖</i> Bookmark & Save Reviews</p>
+        <p><i class="fa-solid fa-shield-halved text-accent"></i> Verified Purchase Badges</p>
+        <p><i class="fa-solid fa-comments text-accent"></i> Nested Comment Discussions</p>
+        <p><i class="fa-solid fa-bookmark text-accent"></i> Bookmark & Save Reviews</p>
       </div>
     </div>
 

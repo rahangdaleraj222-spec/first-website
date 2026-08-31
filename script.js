@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ReviewSphere - Application Logic, Item Search Engine, Theme & Features
+   ReviewSphere - Application Logic & State Management
    ========================================================================== */
 
 // Initial Seed Dataset for rich demonstration across categories
@@ -237,7 +237,10 @@ function saveStateToLocalStorage() {
 function applyTheme(theme) {
   state.theme = theme;
   document.documentElement.setAttribute('data-theme', theme);
-  elements.themeToggle.querySelector('.theme-icon').textContent = theme === 'light' ? '☀️' : '🌙';
+  const icon = elements.themeToggle.querySelector('.theme-icon');
+  if (icon) {
+    icon.className = theme === 'light' ? 'fa-solid fa-sun theme-icon' : 'fa-solid fa-moon theme-icon';
+  }
   saveStateToLocalStorage();
 }
 
@@ -246,7 +249,7 @@ function setupEventListeners() {
   // Theme Toggle Click
   elements.themeToggle.addEventListener('click', () => {
     applyTheme(state.theme === 'dark' ? 'light' : 'dark');
-    showToast(`Switched to ${state.theme.toUpperCase()} Mode 🌓`, 'info');
+    showToast(`Switched to ${state.theme.toUpperCase()} Mode`, 'info');
   });
 
   // Navigation Links
@@ -287,7 +290,7 @@ function setupEventListeners() {
   });
 
   // Search Autocomplete & Input Handler
-  elements.searchInput.addEventListener('input', (e) => {
+  const handleSearch = (e) => {
     const val = e.target.value.trim();
     state.searchQuery = val.toLowerCase();
     elements.searchClear.style.display = val ? 'block' : 'none';
@@ -299,7 +302,10 @@ function setupEventListeners() {
     }
 
     render();
-  });
+  };
+
+  elements.searchInput.addEventListener('input', handleSearch);
+  elements.searchInput.addEventListener('keyup', handleSearch);
 
   elements.searchClear.addEventListener('click', () => {
     elements.searchInput.value = '';
@@ -504,8 +510,8 @@ function setupEventListeners() {
 // Search Autocomplete Dropdown Renderer
 function renderSearchAutocomplete(query) {
   const q = query.toLowerCase();
-  // Unique item names matching query
   const itemMap = new Map();
+  
   state.reviews.forEach(r => {
     if (r.itemName.toLowerCase().includes(q)) {
       if (!itemMap.has(r.itemName)) {
@@ -535,7 +541,7 @@ function renderSearchAutocomplete(query) {
           <div class="ac-title">${escapeHTML(itemName)}</div>
           <div class="ac-meta">${catName} &bull; ${data.count} review${data.count === 1 ? '' : 's'}</div>
         </div>
-        <div style="font-weight:700; color:var(--gold-star);">${avg} ★</div>
+        <div style="font-weight:700; color:var(--gold-star);">${avg} <i class="fa-solid fa-star gold"></i></div>
       </div>
     `;
   }).join('');
@@ -580,11 +586,7 @@ function render() {
     return true;
   });
 
-  // Check item exact or partial match for Scorecard Banner
-  let exactItemMatchList = [];
   if (state.searchQuery) {
-    exactItemMatchList = state.reviews.filter(r => r.itemName.toLowerCase().trim() === state.searchQuery.trim());
-    
     list = list.filter(r => 
       r.itemName.toLowerCase().includes(state.searchQuery) ||
       r.headline.toLowerCase().includes(state.searchQuery) ||
@@ -602,7 +604,7 @@ function render() {
     
     elements.scorecardTitle.textContent = targetItemName;
     elements.scorecardCategory.textContent = catName;
-    elements.scorecardRating.textContent = `${avgScore} ★`;
+    elements.scorecardRating.innerHTML = `${avgScore} <i class="fa-solid fa-star gold"></i>`;
     elements.scorecardCount.textContent = `${itemReviews.length} Review${itemReviews.length === 1 ? '' : 's'}`;
     elements.scorecardBtnItem.textContent = targetItemName;
     elements.scorecardBadge.textContent = `${parseFloat(avgScore) >= 4.0 ? '96% Verified Positive' : '75% Community Score'}`;
@@ -624,7 +626,7 @@ function render() {
   }
 
   const catMeta = CATEGORIES_MAP[state.activeCategory] || CATEGORIES_MAP.all;
-  elements.activeCatTitle.innerHTML = `<i class="fa-solid ${catMeta.icon} text-accent">🔥</i> ${catMeta.name}`;
+  elements.activeCatTitle.innerHTML = `<i class="fa-solid ${catMeta.icon} text-accent"></i> ${catMeta.name}`;
   elements.resultsCount.textContent = `${list.length} Review${list.length === 1 ? '' : 's'} found`;
 
   if (list.length === 0) {
@@ -702,10 +704,10 @@ function createReviewCardHTML(r) {
           </span>
           <div class="card-top-right">
             <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" title="${isBookmarked ? 'Remove Bookmark' : 'Save Review'}">
-              ${isBookmarked ? '🔖' : '📑'}
+              <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
             </button>
             <div class="card-rating">
-              <i class="fa-solid fa-star gold">★</i>
+              <i class="fa-solid fa-star gold"></i>
               <span>${r.rating}.0</span>
             </div>
           </div>
@@ -736,7 +738,7 @@ function createReviewCardHTML(r) {
         </div>
 
         <button class="upvote-btn ${r.upvoted ? 'upvoted' : ''}" title="Helpful review">
-          <i class="fa-solid fa-thumbs-up">👍</i>
+          <i class="fa-solid fa-thumbs-up"></i>
           <span>${r.upvotes}</span>
         </button>
       </div>
@@ -752,7 +754,7 @@ function toggleBookmark(id) {
     showToast('Bookmark removed', 'info');
   } else {
     state.bookmarks.push(id);
-    showToast('🔖 Review Saved to Bookmarks!', 'success');
+    showToast('Review Saved to Bookmarks!', 'success');
   }
   saveStateToLocalStorage();
   updateBookmarkUI();
@@ -764,9 +766,9 @@ function renderBookmarksModal() {
   if (savedReviews.length === 0) {
     elements.bookmarksModalBody.innerHTML = `
       <div style="text-align:center; padding:40px 20px;">
-        <div style="font-size:3rem; margin-bottom:12px;">🔖</div>
+        <div style="font-size:3rem; margin-bottom:12px;"><i class="fa-solid fa-bookmark text-accent"></i></div>
         <h3 style="font-size:1.2rem; margin-bottom:6px;">Koi review saved nahi hai!</h3>
-        <p style="color:var(--text-muted);">Kisi bhi review card par 📑 icon dabakar save karein.</p>
+        <p style="color:var(--text-muted);">Kisi bhi review card par bookmark icon dabakar save karein.</p>
       </div>
     `;
   } else {
@@ -780,8 +782,8 @@ function renderBookmarksModal() {
               <p style="font-size:0.85rem; color:var(--text-muted);">"${escapeHTML(r.headline)}"</p>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
-              <span style="font-weight:800; color:var(--gold-star); font-size:1rem;">${r.rating}.0 ★</span>
-              <button onclick="event.stopPropagation(); toggleBookmark('${r.id}'); renderBookmarksModal();" style="background:transparent; color:var(--red-alert); font-size:1.1rem;">❌</button>
+              <span style="font-weight:800; color:var(--gold-star); font-size:1rem;">${r.rating}.0 <i class="fa-solid fa-star gold"></i></span>
+              <button onclick="event.stopPropagation(); toggleBookmark('${r.id}'); renderBookmarksModal();" style="background:transparent; color:var(--red-alert); font-size:1.1rem;"><i class="fa-solid fa-trash"></i></button>
             </div>
           </div>
         `).join('')}
@@ -816,11 +818,11 @@ function openDetailModal(id) {
 
   const catMeta = CATEGORIES_MAP[r.category] || CATEGORIES_MAP.all;
   const starsHTML = Array.from({length: 5}, (_, i) => 
-    `<span style="color:${i < r.rating ? 'var(--gold-star)' : 'rgba(255,255,255,0.2)'}">★</span>`
+    `<i class="fa-solid fa-star ${i < r.rating ? 'gold' : ''}"></i>`
   ).join('');
 
-  const prosList = (r.pros || []).map(p => `<li><i class="fa-solid fa-circle-check text-green">✅</i> ${escapeHTML(p)}</li>`).join('');
-  const consList = (r.cons || []).map(c => `<li><i class="fa-solid fa-circle-xmark text-red">❌</i> ${escapeHTML(c)}</li>`).join('');
+  const prosList = (r.pros || []).map(p => `<li><i class="fa-solid fa-circle-check text-green"></i> ${escapeHTML(p)}</li>`).join('');
+  const consList = (r.cons || []).map(c => `<li><i class="fa-solid fa-circle-xmark text-red"></i> ${escapeHTML(c)}</li>`).join('');
 
   const commentsList = (r.comments || []).map(cm => `
     <div class="comment-item">
@@ -859,7 +861,7 @@ function openDetailModal(id) {
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
         ${r.pros && r.pros.length ? `
           <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); padding:16px; border-radius:var(--radius-md);">
-            <h4 style="color:var(--green-success); margin-bottom:10px; font-size:0.95rem;">What Users Loved (Pros)</h4>
+            <h4 style="color:var(--green-success); margin-bottom:10px; font-size:0.95rem;"><i class="fa-solid fa-thumbs-up"></i> What Users Loved (Pros)</h4>
             <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
               ${prosList}
             </ul>
@@ -868,7 +870,7 @@ function openDetailModal(id) {
 
         ${r.cons && r.cons.length ? `
           <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); padding:16px; border-radius:var(--radius-md);">
-            <h4 style="color:var(--red-alert); margin-bottom:10px; font-size:0.95rem;">Areas for Improvement (Cons)</h4>
+            <h4 style="color:var(--red-alert); margin-bottom:10px; font-size:0.95rem;"><i class="fa-solid fa-thumbs-down"></i> Areas for Improvement (Cons)</h4>
             <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
               ${consList}
             </ul>
@@ -876,7 +878,6 @@ function openDetailModal(id) {
         ` : ''}
       </div>
 
-      <!-- Author Info -->
       <div style="display:flex; align-items:center; justify-content:space-between; padding-top:16px; border-top:1px solid var(--border-glow);">
         <div class="author-info" onclick="openProfileModal('${escapeHTML(r.authorName)}')">
           <div class="avatar-circle avatar-${r.avatar || 'violet'}">
@@ -892,14 +893,14 @@ function openDetailModal(id) {
         </div>
 
         <button class="upvote-btn ${r.upvoted ? 'upvoted' : ''}" onclick="toggleUpvote('${r.id}'); openDetailModal('${r.id}');">
-          <i class="fa-solid fa-thumbs-up">👍</i>
+          <i class="fa-solid fa-thumbs-up"></i>
           <span>${r.upvotes} Helpful</span>
         </button>
       </div>
 
       <!-- Community Discussion / Comments Section -->
       <div class="comments-section">
-        <h3 class="comments-header">💬 Community Discussion (${(r.comments || []).length})</h3>
+        <h3 class="comments-header"><i class="fa-solid fa-comments text-accent"></i> Community Discussion (${(r.comments || []).length})</h3>
         
         <form onsubmit="postComment(event, '${r.id}')" class="comment-input-box">
           <input type="text" id="comment-text-input" placeholder="Join the discussion... Type your comment" required>
@@ -937,7 +938,7 @@ function postComment(e, reviewId) {
 
   saveStateToLocalStorage();
   openDetailModal(reviewId);
-  showToast('💬 Comment posted!', 'success');
+  showToast('Comment posted!', 'success');
 }
 
 // Open User Profile & Badges Modal
@@ -962,8 +963,8 @@ function openProfileModal(authorName) {
           ${authorInit}
         </div>
         <div class="profile-title-group">
-          <h2>${escapeHTML(authorName)} <span class="profile-rank-badge">🏆 Level 2 Reviewer</span></h2>
-          <p class="profile-joined-text"><i class="fa-solid fa-shield-halved text-accent">🛡️</i> Verified Reviewer &bull; Joined 2026</p>
+          <h2>${escapeHTML(authorName)} <span class="profile-rank-badge"><i class="fa-solid fa-trophy"></i> Level 2 Reviewer</span></h2>
+          <p class="profile-joined-text"><i class="fa-solid fa-shield-halved text-accent"></i> Verified Reviewer &bull; Joined 2026</p>
         </div>
       </div>
 
@@ -982,7 +983,7 @@ function openProfileModal(authorName) {
         </div>
       </div>
 
-      <h3 class="badges-header">🏆 Achievement Badges</h3>
+      <h3 class="badges-header"><i class="fa-solid fa-award text-accent"></i> Achievement Badges</h3>
       <div class="badges-grid">
         <div class="badge-card ${isTopCritic ? 'unlocked' : 'locked'}">
           <div class="badge-icon">👑</div>
@@ -1017,7 +1018,7 @@ function openProfileModal(authorName) {
         </div>
       </div>
 
-      <h3 class="badges-header">📝 Published Reviews by ${escapeHTML(authorName)}</h3>
+      <h3 class="badges-header"><i class="fa-solid fa-newspaper text-accent"></i> Published Reviews by ${escapeHTML(authorName)}</h3>
       <div style="display:flex; flex-direction:column; gap:12px;">
         ${userReviews.length ? userReviews.map(r => `
           <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-glow); padding:14px; border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="openDetailModal('${r.id}'); elements.profileModal.classList.remove('active');">
@@ -1026,7 +1027,7 @@ function openProfileModal(authorName) {
               <p style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">"${escapeHTML(r.headline)}"</p>
             </div>
             <span style="background:rgba(251,191,36,0.15); color:var(--gold-star); padding:4px 10px; border-radius:var(--radius-full); font-weight:700; font-size:0.85rem;">
-              ${r.rating}.0 ★
+              ${r.rating}.0 <i class="fa-solid fa-star gold"></i>
             </span>
           </div>
         `).join('') : '<p style="color:var(--text-muted);">No reviews written yet.</p>'}
