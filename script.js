@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ReviewSphere - Application Logic & State Management
+   ReviewSphere 3D - Sketchfab-Inspired 3D Particle Canvas & App Logic
    ========================================================================== */
 
 // Initial Seed Dataset for rich demonstration across categories
@@ -200,6 +200,7 @@ const elements = {
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
+  initParticleCanvas();
   loadStateFromLocalStorage();
   setupEventListeners();
   updateCategoryCounts();
@@ -207,6 +208,75 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme(state.theme);
   render();
 });
+
+// Sketchfab 3D Particle & Node Canvas Background Animation
+function initParticleCanvas() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const particles = Array.from({ length: 45 }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    vx: (Math.random() - 0.5) * 0.8,
+    vy: (Math.random() - 0.5) * 0.8,
+    radius: Math.random() * 2 + 1
+  }));
+
+  let mouseX = width / 2;
+  let mouseY = height / 2;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw particle connections (Sketchfab cyber-mesh effect)
+    for (let i = 0; i < particles.length; i++) {
+      const p1 = particles[i];
+      p1.x += p1.vx;
+      p1.y += p1.vy;
+
+      if (p1.x < 0 || p1.x > width) p1.vx *= -1;
+      if (p1.y < 0 || p1.y > height) p1.vy *= -1;
+
+      // Draw node particle
+      ctx.beginPath();
+      ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 240, 255, 0.6)';
+      ctx.fill();
+
+      // Connect nearby nodes
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        if (dist < 140) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(0, 240, 255, ${0.18 - dist / 140 * 0.18})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+}
 
 // Load state from localStorage or seed
 function loadStateFromLocalStorage() {
@@ -246,13 +316,11 @@ function applyTheme(theme) {
 
 // Event Listeners Setup
 function setupEventListeners() {
-  // Theme Toggle Click
   elements.themeToggle.addEventListener('click', () => {
     applyTheme(state.theme === 'dark' ? 'light' : 'dark');
     showToast(`Switched to ${state.theme.toUpperCase()} Mode`, 'info');
   });
 
-  // Navigation Links
   document.querySelectorAll('.nav-link').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -262,7 +330,6 @@ function setupEventListeners() {
     });
   });
 
-  // Category Banner Cards
   document.querySelectorAll('.cat-card').forEach(card => {
     card.addEventListener('click', () => {
       const cat = card.dataset.cat;
@@ -275,7 +342,6 @@ function setupEventListeners() {
     });
   });
 
-  // Footer Category Links
   document.querySelectorAll('.cat-footer-link').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -289,7 +355,6 @@ function setupEventListeners() {
     });
   });
 
-  // Search Autocomplete & Input Handler
   const handleSearch = (e) => {
     const val = e.target.value.trim();
     state.searchQuery = val.toLowerCase();
@@ -321,7 +386,6 @@ function setupEventListeners() {
     }
   });
 
-  // Filter Dropdowns
   elements.filterRating.addEventListener('change', (e) => {
     state.ratingFilter = e.target.value;
     render();
@@ -332,7 +396,6 @@ function setupEventListeners() {
     render();
   });
 
-  // Write Modal Open / Close
   const openModal = (defaultItemName = '') => {
     if (defaultItemName) {
       document.getElementById('form-item-name').value = defaultItemName;
@@ -360,7 +423,6 @@ function setupEventListeners() {
     if (e.target === elements.writeModal) closeModal();
   });
 
-  // Bookmarks Modal
   elements.openBookmarksBtn.addEventListener('click', () => {
     renderBookmarksModal();
     elements.bookmarksModal.classList.add('active');
@@ -379,7 +441,6 @@ function setupEventListeners() {
     }
   });
 
-  // Close Detail Modal
   elements.closeDetailBtn.addEventListener('click', () => {
     elements.detailModal.classList.remove('active');
     document.body.style.overflow = 'auto';
@@ -392,7 +453,6 @@ function setupEventListeners() {
     }
   });
 
-  // Profile Modal Event Handlers
   elements.openMyProfileBtn.addEventListener('click', () => {
     openProfileModal('Aarav Sharma');
   });
@@ -409,7 +469,6 @@ function setupEventListeners() {
     }
   });
 
-  // Interactive Star Selector
   const starBtns = elements.starInputGroup.querySelectorAll('.star-btn');
   starBtns.forEach(star => {
     star.addEventListener('mouseover', () => {
@@ -442,7 +501,6 @@ function setupEventListeners() {
     });
   }
 
-  // Form Submit Handler
   elements.reviewForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -496,7 +554,6 @@ function setupEventListeners() {
     showToast('🎉 Review Published Successfully!', 'success');
   });
 
-  // Logo Button Click
   document.getElementById('logo-btn').addEventListener('click', (e) => {
     e.preventDefault();
     state.activeCategory = 'all';
@@ -507,7 +564,6 @@ function setupEventListeners() {
   });
 }
 
-// Search Autocomplete Dropdown Renderer
 function renderSearchAutocomplete(query) {
   const q = query.toLowerCase();
   const itemMap = new Map();
@@ -555,7 +611,6 @@ function selectSearchSuggestion(itemName) {
   render();
 }
 
-// Update Counts for Categories Banner
 function updateCategoryCounts() {
   const counts = { movies: 0, games: 0, tech: 0, food: 0, books: 0, anime: 0 };
   state.reviews.forEach(r => {
@@ -579,7 +634,6 @@ function updateBookmarkUI() {
   elements.bmModalCount.textContent = state.bookmarks.length;
 }
 
-// Render Review Feed based on Filters & Search
 function render() {
   let list = state.reviews.filter(r => {
     if (state.activeCategory !== 'all' && r.category !== state.activeCategory) return false;
@@ -595,7 +649,6 @@ function render() {
     );
   }
 
-  // Handle Scorecard Banner display
   if (state.searchQuery && list.length > 0) {
     const targetItemName = list[0].itemName;
     const itemReviews = state.reviews.filter(r => r.itemName.toLowerCase().trim() === targetItemName.toLowerCase().trim());
@@ -680,7 +733,6 @@ function render() {
   }
 }
 
-// Generate Review Card HTML string
 function createReviewCardHTML(r) {
   const catMeta = CATEGORIES_MAP[r.category] || CATEGORIES_MAP.all;
   const isBookmarked = state.bookmarks.includes(r.id);
@@ -746,7 +798,6 @@ function createReviewCardHTML(r) {
   `;
 }
 
-// Toggle Bookmark Handler
 function toggleBookmark(id) {
   const index = state.bookmarks.indexOf(id);
   if (index >= 0) {
@@ -777,7 +828,7 @@ function renderBookmarksModal() {
         ${savedReviews.map(r => `
           <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-glow); padding:16px; border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="openDetailModal('${r.id}'); elements.bookmarksModal.classList.remove('active');">
             <div>
-              <span style="font-size:0.75rem; color:var(--primary-violet); font-weight:700; text-transform:uppercase;">${r.category}</span>
+              <span style="font-size:0.75rem; color:var(--primary-cyan); font-weight:700; text-transform:uppercase;">${r.category}</span>
               <h4 style="font-size:1.1rem; color:var(--text-main); font-weight:700; margin-top:2px;">${escapeHTML(r.itemName)}</h4>
               <p style="font-size:0.85rem; color:var(--text-muted);">"${escapeHTML(r.headline)}"</p>
             </div>
@@ -792,7 +843,6 @@ function renderBookmarksModal() {
   }
 }
 
-// Toggle Upvote Handler
 function toggleUpvote(id) {
   const rev = state.reviews.find(r => r.id === id);
   if (!rev) return;
@@ -811,7 +861,7 @@ function toggleUpvote(id) {
   render();
 }
 
-// Open Detail View Modal with Comments
+// Open Detail View Modal with Interactive Spinning 3D Canvas Preview & Comments
 function openDetailModal(id) {
   const r = state.reviews.find(item => item.id === id);
   if (!r) return;
@@ -843,6 +893,12 @@ function openDetailModal(id) {
         <span style="font-size:0.85rem; color:var(--text-muted);">${r.timestamp}</span>
       </div>
 
+      <!-- Sketchfab 3D Interactive Item Model Canvas Box -->
+      <div class="model-3d-box">
+        <canvas id="detail-3d-canvas"></canvas>
+        <div class="model-3d-badge"><i class="fa-solid fa-cube"></i> Interactive 3D Preview</div>
+      </div>
+
       <h1 style="font-size:1.8rem; font-weight:800; color:var(--text-main); margin-bottom:8px;">${escapeHTML(r.itemName)}</h1>
       
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
@@ -850,7 +906,7 @@ function openDetailModal(id) {
         <span style="font-weight:700; font-size:1.1rem; color:var(--gold-star);">${r.rating} out of 5 Stars</span>
       </div>
 
-      <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary-violet); margin-bottom:14px; line-height:1.4;">
+      <h3 style="font-size:1.1rem; font-weight:700; color:var(--primary-cyan); margin-bottom:14px; line-height:1.4;">
         "${escapeHTML(r.headline)}"
       </h3>
 
@@ -916,9 +972,85 @@ function openDetailModal(id) {
 
   elements.detailModal.classList.add('active');
   document.body.style.overflow = 'hidden';
+
+  // Render spinning 3D mesh model inside modal canvas
+  setTimeout(init3DModelCanvas, 50);
 }
 
-// Post Comment Handler
+// 3D Spinning Mesh Viewer Animation (Sketchfab-Style Model Canvas)
+function init3DModelCanvas() {
+  const canvas = document.getElementById('detail-3d-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = canvas.parentElement.clientWidth;
+  canvas.height = canvas.parentElement.clientHeight;
+
+  let angleX = 0;
+  let angleY = 0;
+
+  // 3D Cube Vertices
+  const vertices = [
+    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+    [-1, -1,  1], [1, -1,  1], [1, 1,  1], [-1, 1,  1]
+  ];
+
+  const edges = [
+    [0,1], [1,2], [2,3], [3,0],
+    [4,5], [5,6], [6,7], [7,4],
+    [0,4], [1,5], [2,6], [3,7]
+  ];
+
+  function project(x, y, z) {
+    const radX = angleX;
+    const radY = angleY;
+
+    // Rotate Y
+    let x1 = x * Math.cos(radY) + z * Math.sin(radY);
+    let z1 = -x * Math.sin(radY) + z * Math.cos(radY);
+
+    // Rotate X
+    let y2 = y * Math.cos(radX) - z1 * Math.sin(radX);
+    let z2 = y * Math.sin(radX) + z1 * Math.cos(radX);
+
+    const fov = 150;
+    const scale = fov / (fov + z2 + 3);
+    const px = x1 * scale * 45 + canvas.width / 2;
+    const py = y2 * scale * 45 + canvas.height / 2;
+
+    return [px, py];
+  }
+
+  function draw3DCube() {
+    if (!elements.detailModal.classList.contains('active')) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    angleX += 0.01;
+    angleY += 0.015;
+
+    const projected = vertices.map(v => project(v[0], v[1], v[2]));
+
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = '#00f0ff';
+
+    edges.forEach(([i, j]) => {
+      const p1 = projected[i];
+      const p2 = projected[j];
+      ctx.beginPath();
+      ctx.moveTo(p1[0], p1[1]);
+      ctx.lineTo(p2[0], p2[1]);
+      ctx.stroke();
+    });
+
+    requestAnimationFrame(draw3DCube);
+  }
+
+  draw3DCube();
+}
+
 function postComment(e, reviewId) {
   e.preventDefault();
   const input = document.getElementById('comment-text-input');
@@ -941,7 +1073,6 @@ function postComment(e, reviewId) {
   showToast('Comment posted!', 'success');
 }
 
-// Open User Profile & Badges Modal
 function openProfileModal(authorName) {
   const userReviews = state.reviews.filter(r => r.authorName === authorName);
   const reviewCount = userReviews.length || 1;
@@ -1026,7 +1157,7 @@ function openProfileModal(authorName) {
               <h4 style="font-size:0.95rem; color:var(--text-main); font-weight:700;">${escapeHTML(r.itemName)}</h4>
               <p style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">"${escapeHTML(r.headline)}"</p>
             </div>
-            <span style="background:rgba(251,191,36,0.15); color:var(--gold-star); padding:4px 10px; border-radius:var(--radius-full); font-weight:700; font-size:0.85rem;">
+            <span style="background:rgba(255,215,0,0.15); color:var(--gold-star); padding:4px 10px; border-radius:var(--radius-full); font-weight:700; font-size:0.85rem;">
               ${r.rating}.0 <i class="fa-solid fa-star gold"></i>
             </span>
           </div>
@@ -1040,7 +1171,6 @@ function openProfileModal(authorName) {
   document.body.style.overflow = 'hidden';
 }
 
-// Toast Notification Function
 function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = 'toast';
@@ -1054,7 +1184,6 @@ function showToast(message, type = 'info') {
   }, 3500);
 }
 
-// Escape HTML Helper
 function escapeHTML(str) {
   if (!str) return '';
   return str.replace(/[&<>'"]/g, 

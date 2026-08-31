@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReviewSphere - Universal Community Reviews</title>
-  <meta name="description" content="Search by name and share honest reviews for Movies, Games, Tech, Books, Food, and more.">
+  <title>ReviewSphere - Sketchfab-Inspired 3D & Community Review Platform</title>
+  <meta name="description" content="Discover, search by name, and share honest reviews for Movies, Games, Tech, Books, Food with Sketchfab-style 3D interactive previews.">
   
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,14 +19,17 @@
 </head>
 <body>
 
+  <!-- Background Particle & Grid Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
   <!-- Sticky Navbar -->
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="brand-logo" id="logo-btn">
         <div class="logo-icon">
-          <i class="fa-solid fa-star-half-stroke"></i>
+          <i class="fa-solid fa-cube"></i>
         </div>
-        <span class="logo-text">Review<span class="highlight">Sphere</span></span>
+        <span class="logo-text">Review<span class="highlight">Sphere</span> <span class="badge-3d">3D</span></span>
       </a>
 
       <!-- Quick Nav Links -->
@@ -76,28 +79,28 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero Section with Sketchfab Particle Canvas -->
   <section class="hero-section">
     <div class="hero-bg-glow"></div>
     <div class="hero-container">
       <div class="hero-badge animate-float">
         <span class="pulse-dot"></span>
-        <span>World-Class Community Platform</span>
+        <span>Sketchfab-Level Interactive Experience</span>
       </div>
       
       <h1 class="hero-title">
-        Search & Discover Reviews for <span class="gradient-text">Any Item</span>
+        Discover & Review in <span class="gradient-text">Ultra-3D High Quality</span>
       </h1>
       
       <p class="hero-subtitle">
-        Har category ki real audience se verified reviews padhein. Movies, Games, Tech, Food, aur Books ka naam search karke score breakdown dekhein!
+        Har category ki real audience se verified reviews padhein aur 3D interactive item view ke sath review post karein!
       </p>
 
       <!-- Advanced Search Box -->
       <div class="search-box-container">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="search-input" placeholder="Type item name... (e.g. Inception, Cyberpunk, iPhone, Pizza...)" autocomplete="off">
+          <input type="text" id="search-input" placeholder="Search item name... (e.g. Inception, Cyberpunk, iPhone, Pizza...)" autocomplete="off">
           <button class="search-clear-btn" id="search-clear" style="display:none;">
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -126,7 +129,7 @@
     </div>
   </section>
 
-  <!-- Item Aggregated Scorecard Banner (Shown when searching an item) -->
+  <!-- Item Aggregated Scorecard Banner -->
   <div class="item-scorecard-banner" id="item-scorecard" style="display: none;">
     <div class="item-scorecard-content animate-fade-in">
       <div class="item-score-main">
@@ -362,7 +365,7 @@
     </div>
   </div>
 
-  <!-- Detailed Review View Modal (With Comments) -->
+  <!-- Detailed Review View Modal (With Interactive 3D Canvas Preview & Comments) -->
   <div class="modal-overlay" id="detail-modal">
     <div class="modal-card modal-card-lg">
       <button class="modal-close" id="close-detail-modal"><i class="fa-solid fa-xmark"></i></button>
@@ -408,10 +411,10 @@
     <div class="footer-container">
       <div class="footer-brand">
         <a href="#" class="brand-logo">
-          <div class="logo-icon"><i class="fa-solid fa-star-half-stroke"></i></div>
-          <span class="logo-text">Review<span class="highlight">Sphere</span></span>
+          <div class="logo-icon"><i class="fa-solid fa-cube"></i></div>
+          <span class="logo-text">Review<span class="highlight">Sphere</span> <span class="badge-3d">3D</span></span>
         </a>
-        <p>India's Universal Audience Review Platform. Search any item by name and discover real reviews!</p>
+        <p>India's First Sketchfab-Style 3D & Universal Community Review Platform.</p>
       </div>
 
       <div class="footer-links">
@@ -424,14 +427,14 @@
 
       <div class="footer-community">
         <h4>Community & Features</h4>
+        <p><i class="fa-solid fa-cube text-accent"></i> Sketchfab-Style 3D Model Previews</p>
         <p><i class="fa-solid fa-shield-halved text-accent"></i> Verified Purchase Badges</p>
         <p><i class="fa-solid fa-comments text-accent"></i> Nested Comment Discussions</p>
-        <p><i class="fa-solid fa-bookmark text-accent"></i> Bookmark & Save Reviews</p>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; 2026 ReviewSphere. Inspired by IMDb, Rotten Tomatoes & Metacritic.</p>
+      <p>&copy; 2026 ReviewSphere 3D. Crafted with Sketchfab-inspired design aesthetics.</p>
     </div>
   </footer>
 
